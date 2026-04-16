@@ -3,55 +3,128 @@
 @{
     ViewData["Title"] = "Login";
 }
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"] - EventNexus</title>
 
-    <script src="https://cdn.tailwindcss.com"></script>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-gray-100 px-4 mt-15 mx-7">
 
-</head>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-5">
-            <div class="card shadow-sm border-0">
-                <div class="card-body p-5">
-                    <h2 class="text-center mb-4">Welcome Back</h2>
-                    <p class="text-muted text-center mb-4">Please enter your details to sign in</p>
+    <div class="bg-white p-8 rounded-2xl shadow-xl w-full max-w-md mt-10 ">
 
-                    <form asp-action="Login" method="post">
-                        <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+        <!-- Logo / Title -->
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-blue-600">EventNexus</h2>
+            <p class="text-gray-500 text-sm">Sign in to your account</p>
+        </div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="Email" class="form-control" placeholder="name@example.com" autofocus />
-                            <label asp-for="Email">Email Address</label>
-                            <span asp-validation-for="Email" class="text-danger small"></span>
-                        </div>
+        <!-- 🔥 SERVER VALIDATION SUMMARY -->
+        <div asp-validation-summary="All"
+             class="text-red-500 text-sm mb-3"></div>
 
-                        <div class="form-floating mb-3">
-                            <input asp-for="Password" class="form-control" placeholder="Password" />
-                            <label asp-for="Password">Password</label>
-                            <span asp-validation-for="Password" class="text-danger small"></span>
-                        </div>
-
-
-                        <button type="submit" class="btn btn-primary w-100 py-2 mb-3">Sign In</button>
-                    </form>
-
-                    <div class="text-center mt-3">
-                        <p class="small mb-0">Don't have an account? <a href="#" class="text-decoration-none">Register here</a></p>
-                    </div>
-                </div>
+        <!-- Message -->
+        @if (ViewBag.Message != null)
+        {
+            <div class="bg-red-100 text-red-600 px-4 py-2 rounded-lg mb-4 text-sm">
+                @ViewBag.Message
             </div>
-            
-            <div class="text-center mt-4">
-                <a asp-controller="Home" asp-action="Index" class="text-muted small text-decoration-none">
-                    &larr; Back to Home
+        }
+
+        <form asp-controller="Login" asp-action="LoginUser" method="post" class="space-y-4">
+
+            <!-- Email -->
+            <div>
+                <label class="text-sm text-gray-600">Email</label>
+                <input asp-for="Email"
+                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       placeholder="Enter your email" />
+
+                <!-- 🔥 FIELD VALIDATION -->
+                <span asp-validation-for="Email" class="text-red-500 text-xs"></span>
+            </div>
+
+            <!-- Password -->
+            <div class="relative">
+                <label class="text-sm text-gray-600">Password</label>
+                <input asp-for="Password" id="password"
+                       type="password"
+                       class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       placeholder="Enter your password" />
+
+                <!-- Show/Hide -->
+                <span onclick="togglePassword()"
+                      class="absolute right-3 top-9 cursor-pointer text-gray-500 text-sm">
+                    Show
+                </span>
+
+                <span asp-validation-for="Password" class="text-red-500 text-xs"></span>
+            </div>
+
+            <!-- Role -->
+            <div>
+                <label class="text-sm text-gray-600">Role</label>
+                <select asp-for="Role"
+                        class="w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500">
+
+                    <option value="">Select Role</option>
+                    <option>Admin</option>
+                    <option>Manager</option>
+                    <option>User</option>
+
+                </select>
+
+                <span asp-validation-for="Role" class="text-red-500 text-xs"></span>
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="flex justify-between items-center text-sm">
+                <label class="flex items-center space-x-2">
+                    <input type="checkbox" class="accent-blue-600">
+                    <span class="text-gray-600">Remember me</span>
+                </label>
+
+                <a href="#" class="text-blue-600 hover:underline">
+                    Forgot Password?
                 </a>
             </div>
+
+            <!-- Button -->
+            <button type="submit"
+                    class="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition font-semibold">
+                Sign In
+            </button>
+
+        </form>
+
+        <!-- Divider -->
+        <div class="flex items-center my-6">
+            <div class="flex-grow h-px bg-gray-300"></div>
+            <span class="px-3 text-gray-400 text-sm">OR</span>
+            <div class="flex-grow h-px bg-gray-300"></div>
         </div>
+
+        <!-- Social Login -->
+        <button class="w-full border py-2 rounded-lg hover:bg-gray-100 mb-2">
+            Continue with Google
+        </button>
+
+        <!-- Register -->
+        <p class="text-center text-sm text-gray-500 mt-4">
+            Don't have an account?
+            <a href="/Login/Register" class="text-blue-600 hover:underline">Register</a>
+        </p>
+
     </div>
+
 </div>
 
+<!-- 🔥 CLIENT VALIDATION SCRIPT -->
 @section Scripts {
-    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }
+
+<!-- Password Toggle -->
+<script>
+    function togglePassword() {
+        var input = document.getElementById("password");
+        input.type = (input.type === "password") ? "text" : "password";
+    }
+</script>

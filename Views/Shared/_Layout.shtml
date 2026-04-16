@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>@ViewData["Title"] - EventNexus</title>
+
+    <!-- Tailwind -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50 pt-20">
+
+    <!-- 🔥 NAVBAR -->
+    <nav class="bg-white shadow-sm fixed top-0 left-0 w-full z-50">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+
+            <!-- Logo -->
+            <h1 class="text-2xl font-bold text-blue-600">EventNexus</h1>
+
+            <!-- Links -->
+            <div class="space-x-6 flex items-center">
+
+                <a asp-controller="Home" asp-action="Index"
+                   class="text-gray-600 hover:text-blue-600">
+                    Home
+                </a>
+
+                <a href="#" class="text-gray-600 hover:text-blue-600">
+                    Events
+                </a>
+
+                <a href="#" class="text-gray-600 hover:text-blue-600">
+                    Contact
+                </a>
+
+                <a asp-controller="Login" asp-action="LoginUser"
+                   class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    Login
+                </a>
+
+            </div>
+        </div>
+    </nav>
+
+        @RenderBody()
+
+    <!-- 🔥 FOOTER -->
+    <footer class="bg-gray-900 text-gray-300 text-center py-6 mt-10">
+        <p>© 2026 EventNexus. All rights reserved.</p>
+        <p class="text-sm text-gray-500 mt-1">
+            University Event Management System
+        </p>
+    </footer>
+
+    <!-- Scripts -->
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

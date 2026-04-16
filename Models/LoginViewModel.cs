@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace EventNexus.Models
 {
@@ -6,7 +7,9 @@ namespace EventNexus.Models
     {
         private string email;
         private string password;
-
+        private string role;
+        [Required(ErrorMessage ="Please Enter the Email")]
+        [RegularExpression(@"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$", ErrorMessage ="Please requirements not fulfill ")]
         public string Email
         {
             get { return email; }
@@ -16,7 +19,9 @@ namespace EventNexus.Models
                 OnPropertyChanged(nameof(Email));
             }
         }
-
+        [Required(ErrorMessage = "Password is required")]
+        [StringLength(100, MinimumLength = 6, ErrorMessage = "Password must be at least 6 characters")]
+        [DataType(DataType.Password)]
         public string Password
         {
             get { return password; }
@@ -26,6 +31,17 @@ namespace EventNexus.Models
                 OnPropertyChanged(nameof(Password));
             }
         }
+        [Required(ErrorMessage ="Please select the Role")]
+        public string Role
+        {
+            get { return role; }
+            set
+            {
+                role = value;
+                OnPropertyChanged(nameof(Role));
+            }
+        }
+
 
         public event PropertyChangedEventHandler PropertyChanged;
 

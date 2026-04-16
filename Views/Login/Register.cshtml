@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="min-h-screen flex items-center justify-center bg-gray-50 px-4 py-10">
+
+    <div class="w-full max-w-md bg-white shadow-xl rounded-2xl p-8">
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-bold text-gray-800">Create Account</h2>
+            <p class="text-sm text-gray-500 mt-1">Join EventNexus today</p>
+        </div>
+
+        <form asp-action="RegisterUser"  asp-controller="Login" method="post" class="space-y-4">
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" name="Username"
+                       class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       placeholder="Enter username" required />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" name="Email"
+                       class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       placeholder="Enter email" required />
+            </div>
+
+            <!-- Role Dropdown -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Role</label>
+                <select name="Role"
+                        class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        required>
+
+                    <option value="">Select Role</option>
+                    <option value="Admin">Admin</option>
+                    <option value="Manager">Manager</option>
+                    <option value="User">User</option>
+
+                </select>
+
+                <span class="text-red-500 text-xs"></span>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" name="Password"
+                       class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       placeholder="Enter password" required />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Confirm Password</label>
+                <input type="password" name="ConfirmPassword"
+                       class="mt-1 w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                       placeholder="Confirm password" required />
+            </div>
+
+            <div class="flex items-center">
+                <input type="checkbox" name="Terms"
+                       class="w-4 h-4 text-blue-600 border-gray-300 rounded" required />
+                <label class="ml-2 text-sm text-gray-600">
+                    I agree to the Terms & Conditions
+                </label>
+            </div>
+
+            <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 rounded-lg transition">
+                Register
+            </button>
+
+        </form>
+
+        <p class="text-center text-sm text-gray-600 mt-6">
+            Already have an account?
+            <a href="/Login/Login" class="text-blue-600 hover:underline">Login</a>
+        </p>
+
+    </div>
+
+</div>

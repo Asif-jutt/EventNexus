@@ -1,8 +1,113 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<!-- 🔥 IMPORTANT: spacing for fixed navbar -->
+<div class="bg-gray-50 min-h-screen pt-24">
+
+    <!-- Hero Section -->
+    <section class="text-center py-20 px-6">
+        <h2 class="text-4xl md:text-5xl font-bold text-gray-800 mb-6">
+            Manage University Events <span class="text-blue-600">Smartly</span>
+        </h2>
+
+        <p class="text-gray-600 max-w-2xl mx-auto mb-8">
+            EventNexus is a powerful enterprise system for managing events, registrations,
+            seat booking, QR-based entry, and real-time analytics.
+        </p>
+
+        <div class="space-x-4">
+
+            <a asp-controller="Login" asp-action="Login"
+               class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">
+                Get Started
+            </a>
+
+            <a href="#features"
+               class="border px-6 py-3 rounded-lg text-gray-700 hover:bg-gray-100 transition">
+                Learn More
+            </a>
+
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section id="features" class="max-w-7xl mx-auto px-6 py-16">
+
+        <h3 class="text-3xl font-bold text-center mb-12">Core Features</h3>
+
+        <div class="grid md:grid-cols-3 gap-8">
+
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+                <h4 class="text-xl font-semibold mb-2">Event Management</h4>
+                <p class="text-gray-600">Create and manage university events efficiently.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+                <h4 class="text-xl font-semibold mb-2">Seat Booking</h4>
+                <p class="text-gray-600">Real-time seat selection with availability tracking.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+                <h4 class="text-xl font-semibold mb-2">QR Ticket System</h4>
+                <p class="text-gray-600">Secure QR-based entry validation and attendance.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+                <h4 class="text-xl font-semibold mb-2">Dashboard</h4>
+                <p class="text-gray-600">Real-time analytics and insights for admins.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+                <h4 class="text-xl font-semibold mb-2">Payments</h4>
+                <p class="text-gray-600">Integrated payment system for event registration.</p>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl shadow hover:shadow-lg">
+                <h4 class="text-xl font-semibold mb-2">Notifications</h4>
+                <p class="text-gray-600">Email & system notifications for updates.</p>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Workflow -->
+    <section class="bg-white py-16 mx-7" >
+
+        <div class="max-w-6xl mx-auto px-6 text-center">
+
+            <h3 class="text-3xl font-bold mb-10">How It Works</h3>
+
+            <div class="grid md:grid-cols-5 gap-6 text-gray-600">
+
+                <div>Admin creates event</div>
+                <div>Student registers</div>
+                <div>Seat booking</div>
+                <div>QR generated</div>
+                <div>Entry scanning</div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- CTA -->
+    <section class="bg-blue-400 text-white text-center py-16 mx-7 mb-10">
+
+        <h3 class="text-3xl font-bold mb-4">
+            Ready to simplify event management?
+        </h3>
+
+        <p class="mb-6">
+            Start using EventNexus today.
+        </p>
+
+        <a asp-controller="Login" asp-action="Login"
+           class="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100">
+            Get Started
+        </a>
+
+    </section>
+
 </div>
