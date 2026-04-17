@@ -31,11 +31,25 @@
                     <a href="#" class="text-gray-600 hover:text-blue-600 font-medium">
                         Contact
                     </a>
+                    @{
+                        var user = Context.Session.GetString("Email"); 
+                        if (string.IsNullOrEmpty(user))
+                        {
+                            <a asp-controller="Login" asp-action="Login"
+                               class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                Login
+                            </a>
+                        }
+                        else
+                        {
+                            <a asp-controller="Login" asp-action="Logout"
+                               class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
+                                Logout
+                            </a>
+                        }
+                    }
 
-                    <a asp-controller="Login" asp-action="Login"
-                       class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition">
-                        Login
-                    </a>
+                    
 
                 </div>
 

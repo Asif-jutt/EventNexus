@@ -58,11 +58,22 @@ namespace EventNexus.Controllers
                     // ✅ Generate JWT AFTER success
                     string token = _jwtService.GenerateToken(model.Email, model.Role);
                     Response.Cookies.Append("jwt", token);
+                    if(model.Role=="Manager")
+                    {
+                        return RedirectToAction("ManagerDashboard", "Manager");
+                    }
+                    else if(model.Role=="Admin")
+                    {
+                        return RedirectToAction("AdminDashboard", "Admin");
+                    }
+                    else
+                    {
+                        return RedirectToAction("UserDashboard", "User");
+                    }
 
-                    return RedirectToAction("ManagerDashboard", "Manager");
                 }
                 else
-                {
+                   {
                     ViewBag.Message = "Registration failed";
                     return View("Register");
                 }
@@ -91,10 +102,10 @@ namespace EventNexus.Controllers
                     HttpContext.Session.SetString("Role", model.Role);
                     string token = _jwtService.GenerateToken(model.Email, model.Role);
                     if (model.Role == "Admin")
-                        return RedirectToAction("Admin", "AdminDashboard");
+                        return RedirectToAction("AdminDashboard", "Admin");
 
                     else if (model.Role == "Manager")
-                        return RedirectToAction("Manager", "ManagerDashboard");
+                        return RedirectToAction("ManagerDashboard", "Manager");
 
                     else
                         return RedirectToAction("UserDashboard", "User");
@@ -105,6 +116,12 @@ namespace EventNexus.Controllers
                     return View("Login");
                 }
             }
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete("jwt");
+            return View("Login");
         }
     }
 }

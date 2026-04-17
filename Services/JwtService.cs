@@ -18,9 +18,10 @@ namespace EventNexus.Services
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Email, email),
-                new Claim(ClaimTypes.Role, role)
-            };
+        new Claim(ClaimTypes.NameIdentifier, email),
+        new Claim(ClaimTypes.Email, email),
+        new Claim(ClaimTypes.Role, role)
+    };
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_config["Jwt:Key"])
@@ -32,7 +33,7 @@ namespace EventNexus.Services
                 issuer: _config["Jwt:Issuer"],
                 audience: _config["Jwt:Audience"],
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(60),
+                expires: DateTime.UtcNow.AddMinutes(60),
                 signingCredentials: creds
             );
 
