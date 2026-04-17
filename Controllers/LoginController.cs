@@ -123,5 +123,17 @@ namespace EventNexus.Controllers
             Response.Cookies.Delete("jwt");
             return View("Login");
         }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete("jwt");
+            return View("Login");
+        }
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear();
+            Response.Cookies.Delete("jwt");
+            return View("Login");
+        }
     }
 }
