@@ -100,7 +100,11 @@ namespace EventNexus.Controllers
                 {
                     HttpContext.Session.SetString("Email", model.Email);
                     HttpContext.Session.SetString("Role", model.Role);
+
+                    // ✅ Generate JWT AFTER success
                     string token = _jwtService.GenerateToken(model.Email, model.Role);
+                    Response.Cookies.Append("jwt", token);
+
                     if (model.Role == "Admin")
                         return RedirectToAction("AdminDashboard", "Admin");
 
@@ -116,18 +120,6 @@ namespace EventNexus.Controllers
                     return View("Login");
                 }
             }
-        }
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            Response.Cookies.Delete("jwt");
-            return View("Login");
-        }
-        public IActionResult Logout()
-        {
-            HttpContext.Session.Clear();
-            Response.Cookies.Delete("jwt");
-            return View("Login");
         }
         public IActionResult Logout()
         {

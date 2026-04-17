@@ -1,1 +1,139 @@
-﻿<h1>This is the admin dashboard</h1>    
+﻿<div class="flex min-h-screen bg-gray-50">
+
+    <aside class="w-64 bg-white border-r shadow-sm">
+        <div class="p-6 text-xl font-bold text-blue-600">EventNexus</div>
+
+        <nav class="mt-6 space-y-2 px-4">
+            <a class="block px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-medium" href="#">Dashboard</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Events</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Registrations</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Seats</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">QR Scanner</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Reports</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Settings</a>
+        </nav>
+    </aside>
+
+    <main class="flex-1 p-6">
+
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold text-gray-800">Manager Dashboard</h1>
+
+            <button class="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 shadow">
+                + Create Event
+            </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+
+            <div class="bg-white p-5 rounded-xl shadow">
+                <p class="text-gray-500">Total Events</p>
+                <h2 class="text-2xl font-bold">24</h2>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl shadow">
+                <p class="text-gray-500">Active Registrations</p>
+                <h2 class="text-2xl font-bold">1,240</h2>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl shadow">
+                <p class="text-gray-500">Seats Booked</p>
+                <h2 class="text-2xl font-bold">890</h2>
+            </div>
+
+            <div class="bg-white p-5 rounded-xl shadow">
+                <p class="text-gray-500">Revenue</p>
+                <h2 class="text-2xl font-bold">$12,450</h2>
+            </div>
+
+        </div>
+
+        <div class="bg-white rounded-xl shadow overflow-hidden">
+
+            <div class="p-4 flex justify-between items-center border-b">
+                <h2 class="font-semibold text-gray-700">Events Management</h2>
+
+                <input type="text" placeholder="Search events..."
+                       class="border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+            </div>
+
+            <table class="w-full text-sm text-left">
+                <thead class="bg-gray-100 text-gray-600">
+                    <tr>
+                        <th class="p-3">Event</th>
+                        <th class="p-3">Date</th>
+                        <th class="p-3">Venue</th>
+                        <th class="p-3">Seats</th>
+                        <th class="p-3">Status</th>
+                        <th class="p-3">Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3 font-medium">Tech Summit 2026</td>
+                        <td class="p-3">20 Apr</td>
+                        <td class="p-3">Main Auditorium</td>
+                        <td class="p-3">300</td>
+                        <td class="p-3">
+                            <span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">Active</span>
+                        </td>
+                        <td class="p-3 space-x-2">
+
+                            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                View
+                            </button>
+
+                            <button class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                                Edit
+                            </button>
+
+                            <button class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600">
+                                QR
+                            </button>
+
+                            <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                                Delete
+                            </button>
+
+                        </td>
+                    </tr>
+
+                    <tr class="border-t hover:bg-gray-50">
+                        <td class="p-3 font-medium">AI Workshop</td>
+                        <td class="p-3">25 Apr</td>
+                        <td class="p-3">Lab 3</td>
+                        <td class="p-3">120</td>
+                        <td class="p-3">
+                            <span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-xs">Pending</span>
+                        </td>
+                        <td class="p-3 space-x-2">
+
+                            <button class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                View
+                            </button>
+
+                            <button class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
+                                Edit
+                            </button>
+
+                            <button class="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-600">
+                                QR
+                            </button>
+
+                            <button class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600">
+                                Delete
+                            </button>
+
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+
+        </div>
+
+    </main>
+
+</div>
