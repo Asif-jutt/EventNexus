@@ -15,6 +15,10 @@ namespace EventNexus.Controllers
         [HttpGet]
         public IActionResult ManagerDashboard()
         {
+
+
+
+
             return View();
         }
 
