@@ -1,18 +1,21 @@
 ﻿using EventNexus.Models;
 using EventNexus.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Data.SqlClient;
+using System.Linq;
+
 namespace EventNexus.Controllers
 {
     public class LoginController : Controller
     {
-        string connectionstring = "Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=EventNexus;Integrated Security=True;Connect Timeout=30;Encrypt=False;Trust Server Certificate=False;Application Intent=ReadWrite;Multi Subnet Failover=False";
+        private readonly EventNexusContext _context;
         private readonly JwtService _jwtService;
-        public LoginController(JwtService jwtService)
+
+        public LoginController(EventNexusContext context, JwtService jwtService)
         {
+            _context = context;
             _jwtService = jwtService;
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -26,7 +29,7 @@ namespace EventNexus.Controllers
         }
 
         [HttpPost]
-        public IActionResult RegisterUser(LoginViewModel model)
+        public IActionResult RegisterUser(Register model)
         {
             if (string.IsNullOrEmpty(model.Email) ||
                 string.IsNullOrEmpty(model.Password) ||
@@ -36,96 +39,73 @@ namespace EventNexus.Controllers
                 return View("Register");
             }
 
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            try
             {
-                con.Open();
-
-                string query = "INSERT INTO Register (Email, Password, Role) VALUES (@Email, @Password, @Role)";
-                SqlCommand cmd = new SqlCommand(query, con);
-
-                cmd.Parameters.AddWithValue("@Email", model.Email);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@Role", model.Role);
-
-                int result = cmd.ExecuteNonQuery();
-
-                if (result > 0)
+                var newUser = new Register
                 {
-                    // ✅ Set Session AFTER success
-                    HttpContext.Session.SetString("Email", model.Email);
-                    HttpContext.Session.SetString("Role", model.Role);
+                    Email = model.Email,
+                    Password = model.Password,
+                    Role = model.Role
+                };
 
-                    // ✅ Generate JWT AFTER success
-                    string token = _jwtService.GenerateToken(model.Email, model.Role);
-                    Response.Cookies.Append("jwt", token);
-                    if(model.Role=="Manager")
-                    {
-                        return RedirectToAction("ManagerDashboard", "Manager");
-                    }
-                    else if(model.Role=="Admin")
-                    {
-                        return RedirectToAction("AdminDashboard", "Admin");
-                    }
-                    else
-                    {
-                        return RedirectToAction("UserDashboard", "User");
-                    }
+                _context.Registers.Add(newUser);
+                _context.SaveChanges();
 
-                }
+                HttpContext.Session.SetString("Email", model.Email);
+                HttpContext.Session.SetString("Role", model.Role);
+
+                string token = _jwtService.GenerateToken(model.Email, model.Role);
+                Response.Cookies.Append("jwt", token);
+
+                if (model.Role == "Manager")
+                    return RedirectToAction("ManagerDashboard", "Manager");
+                else if (model.Role == "Admin")
+                    return RedirectToAction("AdminDashboard", "Admin");
                 else
-                   {
-                    ViewBag.Message = "Registration failed";
-                    return View("Register");
-                }
+                    return RedirectToAction("UserDashboard", "User");
+            }
+            catch
+            {
+                ViewBag.Error = "Registration failed";
+                return View("Register");
             }
         }
 
-        public IActionResult LoginUser(LoginViewModel model)
+        [HttpPost]
+        public IActionResult LoginUser(Register model)
         {
-            
-            using (SqlConnection con = new SqlConnection(connectionstring))
+            var user = _context.Registers
+                .FirstOrDefault(x => x.Email == model.Email
+                                  && x.Password == model.Password
+                                  && x.Role == model.Role);
+
+            if (user != null)
             {
-                string query = "SELECT * FROM Register WHERE Email = @Email AND Password = @Password AND Role = @Role";
+                HttpContext.Session.SetString("Email", user.Email);
+                HttpContext.Session.SetString("Role", user.Role);
 
-                SqlCommand cmd = new SqlCommand(query, con);
+                string token = _jwtService.GenerateToken(user.Email, user.Role);
+                Response.Cookies.Append("jwt", token);
 
-                cmd.Parameters.AddWithValue("@Email", model.Email);
-                cmd.Parameters.AddWithValue("@Password", model.Password);
-                cmd.Parameters.AddWithValue("@Role", model.Role);
+                if (user.Role == "Admin")
+                    return RedirectToAction("AdminDashboard", "Admin");
 
-                con.Open();
-                SqlDataReader r = cmd.ExecuteReader();
+                else if (user.Role == "Manager")
+                    return RedirectToAction("ManagerDashboard", "Manager");
 
-                if (r.HasRows)
-                {
-                    HttpContext.Session.SetString("Email", model.Email);
-                    HttpContext.Session.SetString("Role", model.Role);
-
-                    // ✅ Generate JWT AFTER success
-                    string token = _jwtService.GenerateToken(model.Email, model.Role);
-                    Response.Cookies.Append("jwt", token);
-
-                    if (model.Role == "Admin")
-                        return RedirectToAction("AdminDashboard", "Admin");
-
-                    else if (model.Role == "Manager")
-                        return RedirectToAction("ManagerDashboard", "Manager");
-
-                    else
-                        return RedirectToAction("UserDashboard", "User");
-                }
                 else
-                {
-                    ViewBag.Error = "Invalid Email or Password";
-                    return View("Login");
-                }
+                    return RedirectToAction("UserDashboard", "User");
             }
+
+            ViewBag.Error = "Invalid Email or Password";
+            return View("Login");
         }
+
         public IActionResult Logout()
         {
             HttpContext.Session.Clear();
             Response.Cookies.Delete("jwt");
-            return View("Login");
+            return RedirectToAction("Login");
         }
     }
 }

@@ -1,18 +1,23 @@
+﻿using EventNexus.Models;
 using EventNexus.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ?? Services FIRST
+// ✅ SERVICES (ALL BEFORE BUILD)
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
 
 builder.Services.AddScoped<JwtService>();
 
-// ?? JWT CONFIG
+builder.Services.AddDbContext<EventNexusContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+// ✅ JWT CONFIG
 var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
 builder.Services.AddAuthentication(options =>
@@ -53,7 +58,7 @@ builder.Services.AddAuthentication(options =>
 
 var app = builder.Build();
 
-// ?? Middleware ORDER (VERY IMPORTANT)
+// ✅ MIDDLEWARE
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -68,10 +73,10 @@ app.UseSession();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// ?? Routing LAST
+// ✅ ROUTING
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}"
+    pattern: "{controller=Login}/{action=Login}/{id?}"
 );
 
 app.Run();
