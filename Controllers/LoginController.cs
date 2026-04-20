@@ -19,7 +19,24 @@ namespace EventNexus.Controllers
         [HttpGet]
         public IActionResult Login()
         {
-            return View();
+            var email = HttpContext.Session.GetString("Email");
+            var role = HttpContext.Session.GetString("Role");
+            if(string.IsNullOrEmpty(email))
+            {
+                return View();
+            }
+            else if(role=="Manager")
+            {
+                return RedirectToAction("ManagerDashboard", "Manager");
+            }
+            else if(role=="Admin")
+            {
+                return RedirectToAction("AdminDashboard", "Admin");
+            }
+            else
+            {
+                return RedirectToAction("UserDashboard", "User");
+            }
         }
 
         [HttpGet]

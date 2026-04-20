@@ -77,5 +77,70 @@ namespace EventNexus.Controllers
                 return View();
             }
         }
+
+        public async Task<IActionResult> Events()
+        {
+            var data = await Dbcontext.Events
+                .Include(e => e.Venue)
+                .ToListAsync();
+
+            return View(data);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetEvent(int id)
+        {
+            var data = await Dbcontext.Events
+                .Include(e => e.Venue)   // 🔥 REQUIRED
+                .Where(e => e.EventId == id)
+                .Select(e => new
+                {
+                    e.EventId,
+                    e.Title,
+                    e.Description,
+                    e.EventDate,
+                    e.Status,
+                    Venue = new
+                    {
+                        e.Venue.Name,
+                        e.Venue.Location,
+                        e.Venue.Capacity
+                    }
+                })
+                .FirstOrDefaultAsync();
+
+            if (data == null)
+                return NotFound();
+            
+            return Json(data);   // 🔥 IMPORTANT
+        }
+        [HttpPost]
+        public async Task<IActionResult> UpdateEvent(Event model)
+        {
+            var eventData = await Dbcontext.Events
+                .Include(e => e.Venue)
+                .FirstOrDefaultAsync(e => e.EventId == model.EventId);
+
+            if (eventData == null)
+                return NotFound();
+
+            // EVENT UPDATE
+            eventData.Title = model.Title;
+            eventData.Description = model.Description;
+            eventData.EventDate = model.EventDate;
+            eventData.Status = model.Status;
+
+            // VENUE UPDATE
+            if (eventData.Venue != null)
+            {
+                eventData.Venue.Name = Request.Form["VenueName"];
+                eventData.Venue.Location = Request.Form["VenueLocation"];
+                eventData.Venue.Capacity = int.Parse(Request.Form["VenueCapacity"]);
+            }
+
+            await Dbcontext.SaveChangesAsync();
+
+            return Ok();
+        }
     }
 }

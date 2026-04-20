@@ -22,7 +22,7 @@ public partial class Event
 
     [Required(ErrorMessage = "Venue is required")]
     public int? VenueId { get; set; }
-
+        
     [Required(ErrorMessage = "Status is required")]
     [RegularExpression("^(Active|Draft|Cancelled)$", ErrorMessage = "Invalid status")]
     public string? Status { get; set; }

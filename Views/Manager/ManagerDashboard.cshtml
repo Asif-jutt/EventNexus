@@ -5,7 +5,7 @@
 
         <nav class="mt-6 space-y-2 px-4">
             <a class="block px-4 py-2 rounded-lg bg-blue-50 text-blue-600 font-medium" href="#">Dashboard</a>
-            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Events</a>
+            <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="/Manager/Events">Events</a>
             <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Registrations</a>
             <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">Seats</a>
             <a class="block px-4 py-2 rounded-lg hover:bg-gray-100" href="#">QR Scanner</a>
@@ -88,11 +88,10 @@
 
                                 <td class="p-3 space-x-2">
 
-                                    <a href="/Manager/View/@item.EventId"
-                                       class="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">
+                                    <button onclick="viewEvent(@item.EventId)"
+                                            class="px-3 py-1 bg-blue-500 text-white rounded">
                                         View
-                                    </a>
-
+                                    </button>
                                     <a href="/Manager/Edit/@item.EventId"
                                        class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600">
                                         Edit
@@ -122,3 +121,174 @@
     </main>
 
 </div>
+<script>
+   async function  viewEvent(id) {
+       await fetch(`/Manager/GetEvent?id=${id}`)
+            .then(res => {
+                if (!res.ok) throw new Error("Not found");
+                return res.json();
+            })
+            .then(data => {
+
+                document.getElementById("mTitle").innerText = data.title;
+                document.getElementById("mDesc").innerText = data.description;
+                document.getElementById("mDate").innerText =
+                    new Date(data.eventDate).toLocaleString();
+                document.getElementById("mStatus").innerText = data.status;
+
+                document.getElementById("mVenue").innerText = data.venue?.name ?? "N/A";
+                document.getElementById("mLocation").innerText = data.venue?.location ?? "N/A";
+                document.getElementById("mCapacity").innerText = data.venue?.capacity ?? "N/A";
+
+                const modal = document.getElementById("viewModal");
+                modal.classList.remove("hidden");
+                modal.classList.add("flex");
+            })
+            .catch(err => {
+                alert("Error loading data");
+                console.log(err);
+            });
+    }
+
+    function closeModal() {
+        const modal = document.getElementById("viewModal");
+        modal.classList.add("hidden");
+        modal.classList.remove("flex");
+    }
+</script>
+<div id="viewModal"
+     class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+
+    <div class="bg-white p-6 rounded-xl w-[500px] shadow-lg">
+
+        <h2 class="text-xl font-bold mb-4">Event Details</h2>
+
+        <p><b>Title:</b> <span id="mTitle"></span></p>
+        <p><b>Description:</b> <span id="mDesc"></span></p>
+        <p><b>Date:</b> <span id="mDate"></span></p>
+        <p><b>Status:</b> <span id="mStatus"></span></p>
+
+        <hr class="my-3">
+
+        <p><b>Venue:</b> <span id="mVenue"></span></p>
+        <p><b>Location:</b> <span id="mLocation"></span></p>
+        <p><b>Capacity:</b> <span id="mCapacity"></span></p>
+
+        <button onclick="closeModal()"
+                class="mt-4 bg-red-500 text-white px-4 py-2 rounded">
+            Close
+        </button>
+
+    </div>
+</div>
+
+
+
+        @* //edit *@
+
+<script>
+    function openEdit(id) {
+
+        fetch(`/Manager/GetEvent?id=${id}`)
+            .then(res => res.json())
+            .then(data => {
+
+                // EVENT
+                document.getElementById("eId").value = data.eventId;
+                document.getElementById("eTitle").value = data.title;
+                document.getElementById("eDesc").value = data.description;
+                document.getElementById("eDate").value = data.eventDate.substring(0,16);
+                document.getElementById("eStatus").value = data.status;
+
+                // VENUE
+                document.getElementById("vName").value = data.venue?.name;
+                document.getElementById("vLocation").value = data.venue?.location;
+                document.getElementById("vCapacity").value = data.venue?.capacity;
+
+                document.getElementById("editModal").classList.remove("hidden");
+                document.getElementById("editModal").classList.add("flex");
+            });
+    }
+
+    function closeEditModal() {
+        document.getElementById("editModal").classList.add("hidden");
+        document.getElementById("editModal").classList.remove("flex");
+    }
+</script>
+
+<div id="editModal"
+     class="fixed inset-0 bg-black bg-opacity-50 hidden items-center justify-center">
+
+    <div class="bg-white p-6 rounded-xl w-[600px] shadow-lg">
+
+        <h2 class="text-xl font-bold mb-4">Edit Event & Venue</h2>
+
+        <input type="hidden" id="eId" />
+        <input type="hidden" id="vId" />
+
+        <!-- EVENT -->
+        <p class="font-bold mt-2">Event Info</p>
+
+        <input id="eTitle" placeholder="Title" class="border w-full p-2 rounded mb-2" />
+        <textarea id="eDesc" placeholder="Description" class="border w-full p-2 rounded mb-2"></textarea>
+
+        <input id="eDate" type="datetime-local" class="border w-full p-2 rounded mb-2" />
+
+        <select id="eStatus" class="border w-full p-2 rounded mb-2">
+            <option>Active</option>
+            <option>Draft</option>
+            <option>Cancelled</option>
+        </select>
+
+        <hr class="my-3">
+
+        <!-- VENUE -->
+        <p class="font-bold">Venue Info</p>
+
+        <input id="vName" placeholder="Venue Name" class="border w-full p-2 rounded mb-2" />
+        <input id="vLocation" placeholder="Location" class="border w-full p-2 rounded mb-2" />
+        <input id="vCapacity" type="number" placeholder="Capacity" class="border w-full p-2 rounded mb-2" />
+
+        <div class="flex justify-end gap-2 mt-4">
+
+            <button onclick="closeEditModal()"
+                    class="bg-gray-500 text-white px-4 py-2 rounded">
+                Cancel
+            </button>
+
+            <button onclick="updateData()"
+                    class="bg-blue-600 text-white px-4 py-2 rounded">
+                Save
+            </button>
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function updateData() {
+
+        const formData = new FormData();
+
+        formData.append("EventId", document.getElementById("eId").value);
+        formData.append("Title", document.getElementById("eTitle").value);
+        formData.append("Description", document.getElementById("eDesc").value);
+        formData.append("EventDate", document.getElementById("eDate").value);
+        formData.append("Status", document.getElementById("eStatus").value);
+
+        formData.append("VenueName", document.getElementById("vName").value);
+        formData.append("VenueLocation", document.getElementById("vLocation").value);
+        formData.append("VenueCapacity", document.getElementById("vCapacity").value);
+
+        fetch("/Manager/UpdateEvent", {
+            method: "POST",
+            body: formData
+        })
+        .then(res => res.text())
+        .then(() => {
+            alert("Updated successfully");
+            location.reload();
+        });
+    }
+</script>
